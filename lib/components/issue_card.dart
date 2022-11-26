@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:civic_issues_riktam_hackathon/views/login_view.dart';
 import 'package:civic_issues_riktam_hackathon/views/messages.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
 class IssueCard extends StatelessWidget {
@@ -63,7 +63,10 @@ class IssueCard extends StatelessWidget {
                       ),
                     ),
                     OutlinedButton.icon(
-                      onPressed: () {},
+                      onPressed: () async {
+                        await FirebaseAuth.instance.signOut();
+                        Get.offAll(LoginScreen());
+                      },
                       icon: Icon(
                         Icons.edit,
                         size: 20,
