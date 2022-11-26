@@ -24,8 +24,11 @@ class _ListOfIssuesState extends State<ListOfIssues> {
 
   @override
   void initState() {
-    print("LIST OF INIT RAN");
-    appStateCtrl.fetchIssues(onlyOwner: false);
+    if (widget.onlyOwner) {
+      appStateCtrl.fetchOwnIssues();
+    } else {
+      appStateCtrl.fetchIssues(onlyOwner: false);
+    }
     super.initState();
   }
 
@@ -33,12 +36,12 @@ class _ListOfIssuesState extends State<ListOfIssues> {
   Widget build(BuildContext context) {
     return GetBuilder<AppStateController>(
       builder: (ctrl) {
-        List<Issue> allIss = ctrl.fetchedIssues;
-        final email = FirebaseAuth.instance.currentUser?.email;
+        List<Issue> allIss = widget.onlyOwner ? ctrl.own : ctrl.fetchedIssues;
 
-        if (widget.onlyOwner) {
-          allIss.removeWhere((element) => element.email != email);
-        }
+        print(allIss);
+
+        allIss.sort((a, b) =>
+            DateTime.parse(a.time).isAfter(DateTime.parse(b.time)) ? 0 : 1);
 
         return allIss.isNotEmpty
             ? ListView.builder(

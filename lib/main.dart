@@ -18,11 +18,40 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool isLoggedIn = false;
+  @override
+  void initState() {
+    lookAuthChanges();
+    super.initState();
+  }
+
+  void lookAuthChanges() {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        print('User is currently signed out!');
+        isLoggedIn = false;
+      } else {
+        print("User logged in");
+        isLoggedIn = true;
+      }
+      if (mounted) {
+        Future.delayed(Duration(milliseconds: 500), () {
+          setState(() {});
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +61,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.indigo,
         ),
-        home: const MyHomePage()
-
-        // const MyHomePage(),
-        );
+        home: isLoggedIn ? const MyHomePage() : LoginScreen());
   }
 }
 
@@ -54,10 +80,11 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Widget> screens = [ListOfIssues(), AddIssue()];
   List<String> headings = ["All Issues", "Add Issue", "My Issues"];
 
+  final appStateCtrl = Get.put(AppStateController());
+
   final dbService = AppDBService();
 
   List<Issue> fetchedIssues = [];
-  final appStateCtrl = Get.put(AppStateController());
 
   @override
   void initState() {
@@ -85,7 +112,9 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: [
           IconButton(
               onPressed: () async {
+                EasyLoading.show(status: "Please wait!");
                 await FirebaseAuth.instance.signOut();
+                EasyLoading.dismiss();
                 Get.offAll(LoginScreen());
               },
               icon: const Icon(Icons.login))

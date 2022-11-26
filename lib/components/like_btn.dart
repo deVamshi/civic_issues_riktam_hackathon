@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,7 +22,8 @@ class _LikeButtonState extends State<LikeButton> {
 
   @override
   void initState() {
-    isLiked = widget.iss.likes.contains(widget.iss.email);
+    isLiked = widget.iss.likes
+        .contains(FirebaseAuth.instance.currentUser?.email ?? "&");
     likeCount = widget.iss.likes.length;
     super.initState();
   }
@@ -36,8 +38,8 @@ class _LikeButtonState extends State<LikeButton> {
           likeCount++;
         isLiked = !isLiked;
         setState(() {});
-        appStateCtrl.hanldeUpvote(
-            widget.iss.id ?? "", widget.iss, widget.iss.email ?? "");
+        appStateCtrl.hanldeUpvote(widget.iss.id ?? "", widget.iss,
+            FirebaseAuth.instance.currentUser?.email ?? "");
       },
       icon: Icon(
         isLiked ? Icons.favorite : Icons.favorite_border_rounded,

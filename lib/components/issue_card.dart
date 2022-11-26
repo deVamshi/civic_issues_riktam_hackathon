@@ -1,11 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:civic_issues_riktam_hackathon/controllers/app_state_controller.dart';
 import 'package:civic_issues_riktam_hackathon/models/issue_model.dart';
 import 'package:civic_issues_riktam_hackathon/untils.dart';
 import 'package:civic_issues_riktam_hackathon/views/edit_issue_view.dart';
-import 'package:civic_issues_riktam_hackathon/views/login_view.dart';
-import 'package:civic_issues_riktam_hackathon/views/messages.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:civic_issues_riktam_hackathon/views/comments_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,9 +10,6 @@ import 'like_btn.dart';
 
 class IssueCard extends StatelessWidget {
   IssueCard({super.key, required this.curIssue, this.isEditable = false});
-
-  final imgURL =
-      "https://images.unsplash.com/photo-1560802053-615279b5f7d9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fHNld2FnZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60";
 
   bool isEditable = false;
 
@@ -35,6 +29,7 @@ class IssueCard extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         clipBehavior: Clip.antiAlias,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: Container(
@@ -50,7 +45,26 @@ class IssueCard extends StatelessWidget {
               ),
             ),
             vspace(10),
-            Text(curIssue.title ?? "Issue"),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+              child: Text(
+                curIssue.title ?? "Issue",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+              child: Text(
+                curIssue.desc ?? "Desc",
+                textAlign: TextAlign.start,
+              ),
+            ),
             vspace(10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -61,7 +75,9 @@ class IssueCard extends StatelessWidget {
                     LikeButton(iss: curIssue),
                     OutlinedButton.icon(
                       onPressed: () {
-                        Get.to(Messages());
+                        Get.to(CommentsView(
+                          iss: curIssue,
+                        ));
                       },
                       icon: const Icon(
                         Icons.message,
