@@ -2,22 +2,27 @@ import 'dart:io';
 
 import 'package:civic_issues_riktam_hackathon/models/issue_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class AppDBService {
-  Future<List<Issue>> getAllIssues(int offset) async {
-    final ref = FirebaseFirestore.instance.collection("issues").withConverter(
-          fromFirestore: Issue.fromFirestore,
-          toFirestore: (Issue issue, _) => issue.toFirestore(),
-        );
+  Future<List<Issue>> getAllIssues(int offset, bool onlyOwner) async {
+    CollectionReference<Issue> ref =
+        FirebaseFirestore.instance.collection("issues").withConverter(
+              fromFirestore: Issue.fromFirestore,
+              toFirestore: (Issue issue, _) => issue.toFirestore(),
+            );
+    if (onlyOwner) {
+      ref.where('id', isEqualTo: FirebaseAuth.instance.currentUser?.email);
+    }
     final docSnap = await ref.get();
     final issues = docSnap.docs;
     List<Issue> allIssues = [];
 
     for (final iss in issues) {
-      print(iss.data().title);
-      allIssues.add(iss.data());
+      Issue currIssue = iss.data();
+      currIssue.id = iss.id;
+      allIssues.add(currIssue);
     }
 
     return allIssues;
@@ -30,6 +35,37 @@ class AppDBService {
         );
     final docRef = await dbRef.add(issue);
     return docRef.id;
+  }
+
+  Future<bool> editIssue(String id, Issue iss) async {
+    final dbRef = FirebaseFirestore.instance
+        .collection("issues")
+        .withConverter(
+          fromFirestore: Issue.fromFirestore,
+          toFirestore: (Issue issue, options) => issue.toFirestore(),
+        )
+        .doc(id);
+    await dbRef.set(iss);
+    return true;
+  }
+
+  Future<bool> handleUpvote(
+      {required String id, required Issue iss, required String email}) async {
+    if (iss.likes.contains(email)) {
+      iss.likes.removeWhere((element) => element == email);
+    } else {
+      iss.likes.add(email);
+    }
+
+    final dbRef = FirebaseFirestore.instance
+        .collection("issues")
+        .withConverter(
+          fromFirestore: Issue.fromFirestore,
+          toFirestore: (Issue issue, options) => issue.toFirestore(),
+        )
+        .doc(id);
+    await dbRef.set(iss);
+    return true;
   }
 
   Future<List<String>> uploadFiles(List<File> _images) async {
