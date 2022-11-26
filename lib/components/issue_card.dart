@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:civic_issues_riktam_hackathon/views/messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 
 class IssueCard extends StatelessWidget {
   const IssueCard({super.key});
@@ -49,7 +51,9 @@ class IssueCard extends StatelessWidget {
                       label: Text("234"),
                     ),
                     OutlinedButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.to(Messages());
+                      },
                       icon: Icon(
                         Icons.message,
                         size: 20,

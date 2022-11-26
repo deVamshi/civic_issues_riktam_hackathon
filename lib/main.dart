@@ -1,8 +1,10 @@
 import 'package:civic_issues_riktam_hackathon/components/issue_card.dart';
 import 'package:civic_issues_riktam_hackathon/views/add_issue_view.dart';
 import 'package:civic_issues_riktam_hackathon/views/list_of_issues.dart';
+import 'package:civic_issues_riktam_hackathon/views/login_view.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,13 +15,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Civic Issues',
-      theme: ThemeData(
-        primarySwatch: Colors.indigo,
-      ),
-      home: const MyHomePage(),
-    );
+    return GetMaterialApp(
+        title: 'Civic Issues',
+        theme: ThemeData(
+          primarySwatch: Colors.indigo,
+        ),
+        home: LoginScreen()
+
+        // const MyHomePage(),
+        );
   }
 }
 
