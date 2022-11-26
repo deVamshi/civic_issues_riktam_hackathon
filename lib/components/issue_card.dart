@@ -1,12 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:civic_issues_riktam_hackathon/models/issue_model.dart';
+import 'package:civic_issues_riktam_hackathon/untils.dart';
+import 'package:civic_issues_riktam_hackathon/views/login_view.dart';
 import 'package:civic_issues_riktam_hackathon/views/messages.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
 class IssueCard extends StatelessWidget {
-  const IssueCard({super.key});
+  IssueCard({super.key, required this.curIssue});
+
+  final imgURL =
+      "https://images.unsplash.com/photo-1560802053-615279b5f7d9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fHNld2FnZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60";
+
+  bool isEditable = false;
+
+  Issue curIssue;
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +39,14 @@ class IssueCard extends StatelessWidget {
                   image: DecorationImage(
                     fit: BoxFit.cover,
                     image: CachedNetworkImageProvider(
-                      "https://images.unsplash.com/photo-1604357209793-fca5dca89f97?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bWFwfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
-                    ),
+                        curIssue.images?.first ?? imgURL),
                   ),
                 ),
               ),
             ),
+            vspace(10),
+            Text(curIssue.title ?? "Issue"),
+            vspace(10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -44,11 +55,11 @@ class IssueCard extends StatelessWidget {
                   children: [
                     OutlinedButton.icon(
                       onPressed: () {},
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.favorite,
                         size: 20,
                       ),
-                      label: Text("234"),
+                      label: Text("${curIssue.upvotes}"),
                     ),
                     OutlinedButton.icon(
                       onPressed: () {
@@ -62,14 +73,17 @@ class IssueCard extends StatelessWidget {
                         "Chat",
                       ),
                     ),
-                    OutlinedButton.icon(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.edit,
-                        size: 20,
-                      ),
-                      label: Text(
-                        "Edit",
+                    Visibility(
+                      visible: isEditable,
+                      child: OutlinedButton.icon(
+                        onPressed: () async {},
+                        icon: Icon(
+                          Icons.edit,
+                          size: 20,
+                        ),
+                        label: Text(
+                          "Edit",
+                        ),
                       ),
                     ),
                   ],
