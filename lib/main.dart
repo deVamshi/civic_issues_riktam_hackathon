@@ -61,14 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    fetchIssues();
-
     super.initState();
-  }
-
-  void fetchIssues() async {
-    fetchedIssues = await dbService.getAllIssues(currOffSet);
-    setState(() {});
   }
 
   Widget getCurrentScreen(int index) {
@@ -77,6 +70,8 @@ class _MyHomePageState extends State<MyHomePage> {
         return ListOfIssues();
       case (1):
         return AddIssue();
+      case (2):
+        return ListOfIssues(onlyOwner: true);
       default:
         return LoginScreen();
     }

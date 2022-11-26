@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.civic_issues_riktam_hackathon">
+
+   <uses-permission android:name="android.permission.INTERNET" />
+
    <application
         android:label="civic_issues_riktam_hackathon"
         android:name="${applicationName}"

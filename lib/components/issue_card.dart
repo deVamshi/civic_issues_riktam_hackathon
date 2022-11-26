@@ -1,14 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:civic_issues_riktam_hackathon/controllers/app_state_controller.dart';
 import 'package:civic_issues_riktam_hackathon/models/issue_model.dart';
 import 'package:civic_issues_riktam_hackathon/untils.dart';
+import 'package:civic_issues_riktam_hackathon/views/edit_issue_view.dart';
 import 'package:civic_issues_riktam_hackathon/views/login_view.dart';
 import 'package:civic_issues_riktam_hackathon/views/messages.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'like_btn.dart';
+
 class IssueCard extends StatelessWidget {
-  IssueCard({super.key, required this.curIssue});
+  IssueCard({super.key, required this.curIssue, this.isEditable = false});
 
   final imgURL =
       "https://images.unsplash.com/photo-1560802053-615279b5f7d9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fHNld2FnZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60";
@@ -39,7 +43,8 @@ class IssueCard extends StatelessWidget {
                   image: DecorationImage(
                     fit: BoxFit.cover,
                     image: CachedNetworkImageProvider(
-                        curIssue.images?.first ?? imgURL),
+                      curIssue.images?.first ?? imgURL,
+                    ),
                   ),
                 ),
               ),
@@ -53,37 +58,28 @@ class IssueCard extends StatelessWidget {
                 ButtonBar(
                   alignment: MainAxisAlignment.center,
                   children: [
-                    OutlinedButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.favorite,
-                        size: 20,
-                      ),
-                      label: Text("${curIssue.upvotes}"),
-                    ),
+                    LikeButton(iss: curIssue),
                     OutlinedButton.icon(
                       onPressed: () {
                         Get.to(Messages());
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.message,
                         size: 20,
                       ),
-                      label: Text(
-                        "Chat",
-                      ),
+                      label: const Text("Chat"),
                     ),
                     Visibility(
                       visible: isEditable,
                       child: OutlinedButton.icon(
-                        onPressed: () async {},
-                        icon: Icon(
+                        onPressed: () async {
+                          Get.to(EditIssue(issue: curIssue));
+                        },
+                        icon: const Icon(
                           Icons.edit,
                           size: 20,
                         ),
-                        label: Text(
-                          "Edit",
-                        ),
+                        label: const Text("Edit"),
                       ),
                     ),
                   ],
