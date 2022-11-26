@@ -26,3 +26,6 @@ InputDecoration inputDecor(String hintText) {
     ),
   );
 }
+
+final imgURL =
+    "https://images.unsplash.com/photo-1560802053-615279b5f7d9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fHNld2FnZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60";

@@ -48,6 +48,8 @@ dependencies:
   firebase_storage: ^11.0.6
   image_picker: ^0.8.6
   lottie: ^2.0.0
+  carousel_slider: ^4.1.1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
