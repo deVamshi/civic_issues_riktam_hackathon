@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "968938171668",
+    "project_id": "civic-issues-riktam-hackathon",
+    "storage_bucket": "civic-issues-riktam-hackathon.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:968938171668:android:9aaa9b26b61eb82f0d2601",
+        "android_client_info": {
+          "package_name": "com.example.civic_issues_riktam_hackathon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "968938171668-lgprfcnnta07soi0fbvmcnubrimaj13v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBCXxuY3fMiWMuB1jXPfGy6UCEKXZuXIM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "968938171668-lgprfcnnta07soi0fbvmcnubrimaj13v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
