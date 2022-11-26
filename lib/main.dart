@@ -1,4 +1,6 @@
 import 'package:civic_issues_riktam_hackathon/components/issue_card.dart';
+import 'package:civic_issues_riktam_hackathon/views/add_issue_view.dart';
+import 'package:civic_issues_riktam_hackathon/views/list_of_issues.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Civic Issues',
       theme: ThemeData(
         primarySwatch: Colors.indigo,
       ),
@@ -29,24 +31,29 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int currInd = 0;
+
+  List<Widget> screens = [ListOfIssues(), AddIssue()];
+  List<String> headings = ["All Issues", "Add Issue", "My Issues"];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text("Home"),
+        title: Text(headings[currInd]),
       ),
-      body: ListView.builder(
-          itemCount: 30, itemBuilder: (item, ind) => const IssueCard()),
+      body: screens[currInd],
       bottomNavigationBar: ConvexAppBar(
-        backgroundColor: Colors.indigo,
-        items: const [
-          TabItem(icon: Icons.home, title: 'Home'),
-          TabItem(icon: Icons.add, title: 'Add Issue'),
-          TabItem(icon: Icons.list, title: 'My Issues'),
-        ],
-        onTap: (int i) => print('click index=$i'),
-      ),
+          backgroundColor: Colors.indigo,
+          items: const [
+            TabItem(icon: Icons.home, title: 'Home'),
+            TabItem(icon: Icons.add, title: 'Add Issue'),
+            TabItem(icon: Icons.list, title: 'My Issues'),
+          ],
+          onTap: (int i) => setState(() {
+                currInd = i;
+              })),
     );
   }
 }
