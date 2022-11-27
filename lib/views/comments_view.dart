@@ -3,13 +3,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:civic_issues_riktam_hackathon/models/comment_model.dart';
 import 'package:civic_issues_riktam_hackathon/services/app_db_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:intl/intl.dart';
 
 import '../models/issue_model.dart';
 import '../untils.dart';
