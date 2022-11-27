@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:civic_issues_riktam_hackathon/controllers/app_state_controller.dart';
 import 'package:civic_issues_riktam_hackathon/models/issue_model.dart';
+import 'package:civic_issues_riktam_hackathon/services/app_db_service.dart';
 import 'package:civic_issues_riktam_hackathon/untils.dart';
 import 'package:civic_issues_riktam_hackathon/views/edit_issue_view.dart';
 import 'package:civic_issues_riktam_hackathon/views/comments_view.dart';
@@ -13,7 +15,7 @@ class IssueCard extends StatelessWidget {
 
   bool isEditable = false;
 
-  void openBottomSheet() {
+  Future<String> openBottomSheet() async {
     Widget tile(String title, IconData iconData) {
       return ListTile(
         onTap: () {
@@ -27,31 +29,34 @@ class IssueCard extends StatelessWidget {
       );
     }
 
-    Get.bottomSheet(
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(height: 20),
-          const Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'Update Issue Status',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
+    String newStatus = await Get.bottomSheet(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 20),
+              const Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Update Issue Status',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+              tile("OPEN", Icons.check_box_outline_blank_rounded),
+              tile("RESOLVED", Icons.check_box_rounded),
+              tile("SUBMITTED TO NEWSPAPER", Icons.newspaper_rounded),
+              tile("NO ACTION TAKEN", Icons.error_outline),
+            ],
           ),
-          tile("OPEN", Icons.check_box_outline_blank_rounded),
-          tile("RESOLVED", Icons.check_box_rounded),
-          tile("SUBMITTED TO NEWSPAPER", Icons.newspaper_rounded),
-          tile("NO ACTION TAKEN", Icons.error_outline),
-        ],
-      ),
-      backgroundColor: Colors.white,
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-    );
+          backgroundColor: Colors.white,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ) ??
+        "";
+
+    return newStatus;
   }
 
   Issue curIssue;
@@ -92,17 +97,27 @@ class IssueCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    curIssue.title ?? "Issue",
-                    textAlign: TextAlign.start,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                  Expanded(
+                    child: Text(
+                      curIssue.title ?? "Issue",
+                      textAlign: TextAlign.start,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
                     ),
                   ),
+                  hspace(10),
                   GestureDetector(
-                    onTap: () {
-                      openBottomSheet();
+                    onTap: () async {
+                      final ctrl = Get.find<AppStateController>();
+
+                      if (!ctrl.isAdmin) return;
+
+                      String newStatus = await openBottomSheet();
+                      if (newStatus != null && newStatus.isNotEmpty) {
+                        ctrl.updateIssueStatus(curIssue, newStatus);
+                      }
                     },
                     child: Chip(
                       label: Text(

@@ -38,8 +38,8 @@ class _LikeButtonState extends State<LikeButton> {
           likeCount++;
         isLiked = !isLiked;
         setState(() {});
-        appStateCtrl.hanldeUpvote(widget.iss.id ?? "", widget.iss,
-            FirebaseAuth.instance.currentUser?.email ?? "");
+        appStateCtrl.hanldeUpvote(widget.iss.id ?? "*", widget.iss,
+            FirebaseAuth.instance.currentUser?.email ?? "*");
       },
       icon: Icon(
         isLiked ? Icons.favorite : Icons.favorite_border_rounded,

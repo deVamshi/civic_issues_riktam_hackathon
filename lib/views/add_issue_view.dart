@@ -81,7 +81,7 @@ class _AddIssueState extends State<AddIssue> {
       onTap: () async {
         final ImagePicker _picker = ImagePicker();
         final XFile? image =
-            await _picker.pickImage(source: ImageSource.gallery);
+            await _picker.pickImage(source: ImageSource.camera);
 
         if (image != null) selectedImages.add(File(image.path));
         setState(() {});

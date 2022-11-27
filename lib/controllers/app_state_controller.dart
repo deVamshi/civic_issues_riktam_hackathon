@@ -1,6 +1,4 @@
-import 'package:civic_issues_riktam_hackathon/main.dart';
 import 'package:civic_issues_riktam_hackathon/services/app_db_service.dart';
-import 'package:civic_issues_riktam_hackathon/views/login_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -19,6 +17,14 @@ class AppStateController extends GetxController {
 
   List<Issue> fetchedIssues = [];
   List<Issue> own = [];
+
+  void updateIssueStatus(Issue iss, String newStatus) async {
+    EasyLoading.show();
+    await AppDBService().updateStatus(iss, newStatus);
+    EasyLoading.dismiss();
+    fetchIssues();
+    update();
+  }
 
   Future<void> fetchOwnIssues() async {
     List<Issue> ownIssues = [];
