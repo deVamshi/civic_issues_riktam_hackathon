@@ -47,14 +47,28 @@ class IssueCard extends StatelessWidget {
             vspace(10),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-              child: Text(
-                curIssue.title ?? "Issue",
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    curIssue.title ?? "Issue",
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Chip(
+                      label: Text(
+                        "${curIssue.status}",
+                      ),
+                      backgroundColor: badgeColor["${curIssue.status}"],
+                    ),
+                  ),
+                ],
               ),
             ),
             Padding(
