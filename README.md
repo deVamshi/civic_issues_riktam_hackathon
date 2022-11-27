@@ -29,6 +29,19 @@
 - Email Verification
 - Deletion of issues as an admin
 
+### Tech Stack Used:
+
+## FrontEnd:
+
+- Flutter for Front-End UI
+- Getx for state management
+
+## Backend:
+
+- Firebase Auth
+- Firebase Cloud Firestore
+- Firebase Cloud Storage
+
 ## Useful Links:
 
 - [Installable APK](https://drive.google.com/file/d/1QiiTPfcWlHJhVhwlBC3Vd69r7W2NqBRI/view?usp=sharing)
