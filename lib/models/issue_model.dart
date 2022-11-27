@@ -2,21 +2,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Issue {
   String? id;
+  String? email;
   String? title;
   String? desc;
   String time;
   List<String?>? images = [];
   String status;
-  int upvotes;
+  List<String> likes = [];
 
   Issue({
     this.id,
+    this.email,
     this.title,
     this.desc,
     required this.time,
     this.images,
     this.status = "OPEN",
-    this.upvotes = 0,
+    this.likes = const [],
   });
 
   factory Issue.fromFirestore(
@@ -25,24 +27,25 @@ class Issue {
   ) {
     final data = snapshot.data();
     return Issue(
-        id: data?['id'],
-        title: data?['title'],
-        desc: data?['desc'],
-        time: data?['time'] ?? DateTime.now(),
-        images: data?['images'] is Iterable ? List.from(data?['images']) : null,
-        status: data?['status'],
-        upvotes: data?['upvotes']);
+      email: data?['email'],
+      title: data?['title'],
+      desc: data?['desc'],
+      time: data?['time'] ?? DateTime.now(),
+      images: data?['images'] is Iterable ? List.from(data?['images']) : [],
+      status: data?['status'],
+      likes: data?['likes'] is Iterable ? List.from(data?['likes']) : [],
+    );
   }
 
   Map<String, dynamic> toFirestore() {
     return {
-      if (id != null) "id": id,
+      if (email != null) "email": email,
       if (title != null) "title": title,
       if (desc != null) "desc": desc,
       "time": time,
       if (images != null) "images": images,
       "status": status,
-      "upvotes": upvotes,
+      "likes": likes,
     };
   }
 }

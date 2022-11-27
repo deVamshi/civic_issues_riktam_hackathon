@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:civic_issues_riktam_hackathon/controllers/app_state_controller.dart';
 import 'package:civic_issues_riktam_hackathon/models/issue_model.dart';
 import 'package:civic_issues_riktam_hackathon/services/app_db_service.dart';
 import 'package:civic_issues_riktam_hackathon/untils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -18,6 +20,11 @@ class AddIssue extends StatefulWidget {
 }
 
 class _AddIssueState extends State<AddIssue> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   final titleCtrl = TextEditingController();
 
   final descCtrl = TextEditingController();
@@ -38,8 +45,11 @@ class _AddIssueState extends State<AddIssue> {
 
     final db = AppDBService();
     currentIssue.images = await db.uploadFiles(selectedImages);
+    final appStateCtrl = Get.find<AppStateController>();
     currentIssue.title = titleCtrl.text.trim();
     currentIssue.desc = descCtrl.text.trim();
+    currentIssue.email =
+        FirebaseAuth.instance.currentUser?.email ?? "bugging@gmail.com";
 
     await db.addIssue(currentIssue);
     EasyLoading.dismiss();
@@ -47,13 +57,10 @@ class _AddIssueState extends State<AddIssue> {
     titleCtrl.clear();
     descCtrl.clear();
     selectedImages = [];
-
-    final appStateCtrl = Get.find<AppStateController>();
-    appStateCtrl.fetchIssues();
     appStateCtrl.updateIndex(0);
   }
 
-  Widget imageWidget(File file) {
+  Widget imageWidgetLocal(File file) {
     return Container(
       margin: const EdgeInsets.only(right: 10),
       width: 100,
@@ -74,7 +81,7 @@ class _AddIssueState extends State<AddIssue> {
       onTap: () async {
         final ImagePicker _picker = ImagePicker();
         final XFile? image =
-            await _picker.pickImage(source: ImageSource.gallery);
+            await _picker.pickImage(source: ImageSource.camera);
 
         if (image != null) selectedImages.add(File(image.path));
         setState(() {});
@@ -85,13 +92,13 @@ class _AddIssueState extends State<AddIssue> {
         width: 100,
         height: 100,
         clipBehavior: Clip.antiAlias,
-        child: Icon(
-          Icons.add_a_photo,
-          color: Colors.indigo,
-        ),
         decoration: BoxDecoration(
           color: Colors.indigo[100],
           borderRadius: BorderRadius.circular(10),
+        ),
+        child: const Icon(
+          Icons.add_a_photo,
+          color: Colors.indigo,
         ),
       ),
     );
@@ -100,7 +107,7 @@ class _AddIssueState extends State<AddIssue> {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
       children: [
         vspace(20),
         TextField(
@@ -135,11 +142,11 @@ class _AddIssueState extends State<AddIssue> {
         SizedBox(
           height: 100,
           child: ListView(
+            scrollDirection: Axis.horizontal,
             children: [
-              ...selectedImages.map((img) => imageWidget(img)),
+              ...selectedImages.map((img) => imageWidgetLocal(img)),
               addPhotoWidget(),
             ],
-            scrollDirection: Axis.horizontal,
           ),
         ),
         vspace(20),

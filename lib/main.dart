@@ -18,11 +18,42 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool isLoggedIn = false;
+  bool isAdmin = false;
+  @override
+  void initState() {
+    lookAuthChanges();
+    super.initState();
+  }
+
+  void lookAuthChanges() {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        print('User is currently signed out!');
+        isLoggedIn = false;
+      } else {
+        print("User logged in");
+        isAdmin = user.email == "admin@gmail.com";
+        isLoggedIn = true;
+      }
+      if (mounted) {
+        Future.delayed(Duration(milliseconds: 800), () {
+          setState(() {});
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,15 +63,14 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.indigo,
         ),
-        home: const MyHomePage()
-
-        // const MyHomePage(),
-        );
+        home: isLoggedIn ? MyHomePage(isAdmin: isAdmin) : LoginScreen());
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  MyHomePage({super.key, required this.isAdmin});
+
+  bool isAdmin;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -54,21 +84,18 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Widget> screens = [ListOfIssues(), AddIssue()];
   List<String> headings = ["All Issues", "Add Issue", "My Issues"];
 
+  final appStateCtrl = Get.put(AppStateController());
+
   final dbService = AppDBService();
 
   List<Issue> fetchedIssues = [];
-  final appStateCtrl = Get.put(AppStateController());
 
   @override
   void initState() {
-    fetchIssues();
-
+    if (widget.isAdmin) {
+      appStateCtrl.updateIsAdmin(true);
+    }
     super.initState();
-  }
-
-  void fetchIssues() async {
-    fetchedIssues = await dbService.getAllIssues(currOffSet);
-    setState(() {});
   }
 
   Widget getCurrentScreen(int index) {
@@ -77,6 +104,8 @@ class _MyHomePageState extends State<MyHomePage> {
         return ListOfIssues();
       case (1):
         return AddIssue();
+      case (2):
+        return ListOfIssues(onlyOwner: true);
       default:
         return LoginScreen();
     }
@@ -90,25 +119,31 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: [
           IconButton(
               onPressed: () async {
+                EasyLoading.show(status: "Please wait!");
                 await FirebaseAuth.instance.signOut();
+                EasyLoading.dismiss();
                 Get.offAll(LoginScreen());
               },
               icon: const Icon(Icons.login))
         ],
         title: Text(headings[currInd]),
       ),
-      body: GetBuilder<AppStateController>(
-        builder: (ctrl) => getCurrentScreen(ctrl.currIndex),
-      ),
-      bottomNavigationBar: ConvexAppBar(
-        backgroundColor: Colors.indigo,
-        items: const [
-          TabItem(icon: Icons.home, title: 'Home'),
-          TabItem(icon: Icons.add, title: 'Add Issue'),
-          TabItem(icon: Icons.list, title: 'My Issues'),
-        ],
-        onTap: (int i) => appStateCtrl.updateIndex(i),
-      ),
+      body: widget.isAdmin
+          ? ListOfIssues()
+          : GetBuilder<AppStateController>(
+              builder: (ctrl) => getCurrentScreen(ctrl.currIndex),
+            ),
+      bottomNavigationBar: widget.isAdmin
+          ? null
+          : ConvexAppBar(
+              backgroundColor: Colors.indigo,
+              items: const [
+                TabItem(icon: Icons.home, title: 'Home'),
+                TabItem(icon: Icons.add, title: 'Add Issue'),
+                TabItem(icon: Icons.list, title: 'My Issues'),
+              ],
+              onTap: (int i) => appStateCtrl.updateIndex(i),
+            ),
     );
   }
 }
