@@ -14,14 +14,25 @@ class AppStateController extends GetxController {
   List<Issue> fetchedIssues = [];
   List<Issue> own = [];
 
-  void fetchOwnIssues() {
-    fetchIssues(onlyOwner: true, showLoading: true);
+  Future<void> fetchOwnIssues() async {
+    List<Issue> ownIssues = [];
+    String currUserEmail = FirebaseAuth.instance.currentUser?.email ?? "*";
+
+    print(currUserEmail);
+    for (Issue iss in fetchedIssues) {
+      if (iss.email == currUserEmail) ownIssues.add(iss);
+      print(iss.email);
+    }
+
+    print(ownIssues);
+
+    own = ownIssues;
+    update();
   }
 
   Future<List<Issue>> fetchIssues(
       {bool onlyOwner = false, bool showLoading = true}) async {
     if (showLoading) EasyLoading.show(status: "Fetching Issues");
-
     print(onlyOwner);
 
     if (onlyOwner) {
@@ -42,11 +53,17 @@ class AppStateController extends GetxController {
 
   @override
   void onInit() {
+    fetchIssues();
     super.onInit();
   }
 
   void updateIndex(int i) {
     currIndex = i;
+    if (currIndex == 0) {
+      fetchIssues(onlyOwner: false, showLoading: false);
+    } else if (currIndex == 2) {
+      fetchOwnIssues();
+    }
     update();
   }
 }
