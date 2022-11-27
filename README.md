@@ -29,14 +29,12 @@
 - Email Verification
 - Deletion of issues as an admin
 
-### Tech Stack Used:
-
-## FrontEnd:
+## FrontEnd Tech Stack:
 
 - Flutter for Front-End UI
 - Getx for state management
 
-## Backend:
+## Backend Tech Stack:
 
 - Firebase Auth
 - Firebase Cloud Firestore
