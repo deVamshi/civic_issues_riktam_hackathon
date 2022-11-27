@@ -11,6 +11,12 @@ import 'package:lottie/lottie.dart';
 import '../components/issue_card.dart';
 import '../models/issue_model.dart';
 
+Widget emptyListWidget() {
+  return Center(
+    child: Lottie.asset('assets/lottie/empty.json'),
+  );
+}
+
 class ListOfIssues extends StatefulWidget {
   ListOfIssues({super.key, this.onlyOwner = false});
 
@@ -33,42 +39,17 @@ class _ListOfIssuesState extends State<ListOfIssues> {
     super.initState();
   }
 
-  Widget emptyListWidget() {
-    return Center(
-      child: Lottie.asset('assets/lottie/empty.json'),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return GetBuilder<AppStateController>(
       builder: (ctrl) {
         if (widget.onlyOwner) {
-          return FutureBuilder(
-              future: ctrl.fetchOwnIssues(),
-              builder: (ctxt, snap) {
-                if (snap.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-
-                return ctrl.own.isNotEmpty
-                    ? ListView.builder(
-                        itemCount: ctrl.own.length,
-                        itemBuilder: (item, ind) {
-                          Issue iss = ctrl.own[ind];
-                          return IssueCard(
-                            curIssue: iss,
-                            isEditable: widget.onlyOwner,
-                          );
-                        })
-                    : emptyListWidget();
-              });
+          return OwnIssuesWidget(allIssues: ctrl.fetchedIssues);
         } else {
           List<Issue> allIss = ctrl.fetchedIssues;
           print("All Issues");
           print(allIss);
+
           allIss.sort((a, b) =>
               DateTime.parse(a.time).isAfter(DateTime.parse(b.time)) ? 0 : 1);
 
@@ -77,7 +58,6 @@ class _ListOfIssuesState extends State<ListOfIssues> {
                   itemCount: allIss.length,
                   itemBuilder: (item, ind) {
                     Issue iss = allIss[ind];
-
                     return IssueCard(
                       curIssue: iss,
                       isEditable: widget.onlyOwner,
@@ -87,5 +67,57 @@ class _ListOfIssuesState extends State<ListOfIssues> {
         }
       },
     );
+  }
+}
+
+class OwnIssuesWidget extends StatefulWidget {
+  OwnIssuesWidget({super.key, required this.allIssues});
+  List<Issue> allIssues;
+
+  @override
+  State<OwnIssuesWidget> createState() => _OwnIssuesWidgetState();
+}
+
+class _OwnIssuesWidgetState extends State<OwnIssuesWidget> {
+  List<Issue> allIssues = [];
+
+  List<Issue> ownIssues = [];
+  String currId = FirebaseAuth.instance.currentUser?.email ?? "*";
+
+  @override
+  void initState() {
+    print("CURR ID");
+    print(currId);
+    allIssues = widget.allIssues;
+    filterOutOwnIssues();
+    super.initState();
+  }
+
+  void filterOutOwnIssues() {
+    ownIssues = [];
+    print("ALLL ISSUESSS IN OWN ISSUS S");
+    print(allIssues);
+    for (var iss in allIssues) {
+      debugPrint("${iss.email} --- $currId");
+      if (iss.email == currId) {
+        ownIssues.add(iss);
+      }
+    }
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ownIssues.isNotEmpty
+        ? ListView.builder(
+            itemCount: ownIssues.length,
+            itemBuilder: (item, ind) {
+              Issue iss = ownIssues[ind];
+              return IssueCard(
+                curIssue: iss,
+                isEditable: true,
+              );
+            })
+        : emptyListWidget();
   }
 }
