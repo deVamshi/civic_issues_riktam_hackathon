@@ -1,16 +1,38 @@
-# civic_issues_riktam_hackathon
+# Civic Issues Mobile App for Riktam Round 3 Hackathon
 
-A new Flutter project.
+## Developed By:
 
-## Getting Started
+#### Name: Telugu Vamshidhar
 
-This project is a starting point for a Flutter application.
+#### Email: teluguvamshi77@gmail.com
 
-A few resources to get you started if this is your first Flutter project:
+#### College: Sree Vidyanikethan Engineering College
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+#### Roll ID: 19121A04M2
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+#### Place: Tirupati
+
+## Features Implemented:
+
+- Login/Logout
+- Register
+- Add Issue
+- Edit Issue
+- See all issues
+- Add and see comments for each issue
+- Upvote feature
+- Add multiple images for a issue
+- Update status for each issue as an admin
+
+## Features Pending:
+
+- Email Verification
+- Deletion of issues as an admin
+
+## Useful Links:
+
+- [Installable APK](https://drive.google.com/file/d/1QiiTPfcWlHJhVhwlBC3Vd69r7W2NqBRI/view?usp=sharing)
+- [Video Walkthrough](https://youtu.be/UB480UUsDMo)
+
+## Screen Shots:
+
