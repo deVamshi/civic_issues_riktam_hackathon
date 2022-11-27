@@ -33,6 +33,6 @@ final imgURL =
 final badgeColor = {
   "OPEN": Colors.amber,
   "NO ACTION TAKEN": Colors.grey,
-  "SUBMITTED TO NEWSPAPER": Colors.lime,
-  "RESOLVED": Colors.greenAccent,
+  "SUBMITTED TO NEWSPAPER": Colors.pinkAccent,
+  "RESOLVED": Colors.green,
 };

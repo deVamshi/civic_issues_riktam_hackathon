@@ -1,17 +1,20 @@
-import 'package:civic_issues_riktam_hackathon/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:get/get.dart';
 
+import '../main.dart';
+
 class LoginScreen extends StatelessWidget {
+  late UserCredential user;
+
   Future<String?> _authUser(LoginData data) async {
     String errorMessage = "An Unknown error occured, Please try again";
 
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: data.name, password: data.password);
+      user = credential;
       return null;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -36,6 +39,7 @@ class LoginScreen extends StatelessWidget {
         email: data.name ?? "",
         password: data.password ?? "",
       );
+      user = credential;
       return null;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -82,7 +86,9 @@ class LoginScreen extends StatelessWidget {
       onLogin: _authUser,
       onSignup: _signupUser,
       onSubmitAnimationCompleted: () {
-        Get.offAll(MyHomePage());
+        Get.offAll(MyHomePage(
+          isAdmin: user.user?.email == "admin@gmail.com",
+        ));
       },
       onRecoverPassword: _recoverPassword,
     );

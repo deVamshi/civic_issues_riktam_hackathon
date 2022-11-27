@@ -30,6 +30,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool isLoggedIn = false;
+  bool isAdmin = false;
   @override
   void initState() {
     lookAuthChanges();
@@ -43,10 +44,11 @@ class _MyAppState extends State<MyApp> {
         isLoggedIn = false;
       } else {
         print("User logged in");
+        isAdmin = user.email == "admin@gmail.com";
         isLoggedIn = true;
       }
       if (mounted) {
-        Future.delayed(Duration(milliseconds: 500), () {
+        Future.delayed(Duration(milliseconds: 800), () {
           setState(() {});
         });
       }
@@ -61,12 +63,14 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           primarySwatch: Colors.indigo,
         ),
-        home: isLoggedIn ? const MyHomePage() : LoginScreen());
+        home: isLoggedIn ? MyHomePage(isAdmin: isAdmin) : LoginScreen());
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  MyHomePage({super.key, required this.isAdmin});
+
+  bool isAdmin;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -88,6 +92,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    if (widget.isAdmin) {
+      appStateCtrl.updateIsAdmin(true);
+    }
     super.initState();
   }
 
@@ -121,18 +128,22 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
         title: Text(headings[currInd]),
       ),
-      body: GetBuilder<AppStateController>(
-        builder: (ctrl) => getCurrentScreen(ctrl.currIndex),
-      ),
-      bottomNavigationBar: ConvexAppBar(
-        backgroundColor: Colors.indigo,
-        items: const [
-          TabItem(icon: Icons.home, title: 'Home'),
-          TabItem(icon: Icons.add, title: 'Add Issue'),
-          TabItem(icon: Icons.list, title: 'My Issues'),
-        ],
-        onTap: (int i) => appStateCtrl.updateIndex(i),
-      ),
+      body: widget.isAdmin
+          ? ListOfIssues()
+          : GetBuilder<AppStateController>(
+              builder: (ctrl) => getCurrentScreen(ctrl.currIndex),
+            ),
+      bottomNavigationBar: widget.isAdmin
+          ? null
+          : ConvexAppBar(
+              backgroundColor: Colors.indigo,
+              items: const [
+                TabItem(icon: Icons.home, title: 'Home'),
+                TabItem(icon: Icons.add, title: 'Add Issue'),
+                TabItem(icon: Icons.list, title: 'My Issues'),
+              ],
+              onTap: (int i) => appStateCtrl.updateIndex(i),
+            ),
     );
   }
 }

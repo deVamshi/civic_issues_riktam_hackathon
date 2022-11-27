@@ -10,6 +10,12 @@ import '../models/issue_model.dart';
 class AppStateController extends GetxController {
   int currIndex = 0;
   int currOffset = 0;
+  bool isAdmin = false;
+
+  void updateIsAdmin(bool newAdminState) {
+    isAdmin = newAdminState;
+    update();
+  }
 
   List<Issue> fetchedIssues = [];
   List<Issue> own = [];
