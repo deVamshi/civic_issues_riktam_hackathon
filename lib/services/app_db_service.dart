@@ -39,16 +39,28 @@ class AppDBService {
   }
 
   Future<List<Issue>> getAllIssues(int offset, bool onlyOwner) async {
-    CollectionReference<Issue> ref =
+    late CollectionReference<Issue> ref =
         FirebaseFirestore.instance.collection("issues").withConverter(
               fromFirestore: Issue.fromFirestore,
               toFirestore: (Issue issue, _) => issue.toFirestore(),
             );
-    print(onlyOwner);
-    if (onlyOwner) {
-      print("COMIN");
-      ref.where('email', isEqualTo: FirebaseAuth.instance.currentUser?.email);
-    }
+
+    // if (onlyOwner) {
+    //   // FirebaseFirestore.instance
+    //   //     .collection("issues")
+    //   //     .withConverter(
+    //   //       fromFirestore: Issue.fromFirestore,
+    //   //       toFirestore: (Issue issue, _) => issue.toFirestore(),
+    //   //     )
+    //   //     .where('email', isEqualTo: FirebaseAuth.instance.currentUser?.email)
+    //   //     .get();
+    // } else {
+    //   ref = FirebaseFirestore.instance.collection("issues").withConverter(
+    //         fromFirestore: Issue.fromFirestore,
+    //         toFirestore: (Issue issue, _) => issue.toFirestore(),
+    //       );
+    // }
+    
     final docSnap = await ref.get();
     final issues = docSnap.docs;
     List<Issue> allIssues = [];

@@ -57,7 +57,6 @@ class _AddIssueState extends State<AddIssue> {
     titleCtrl.clear();
     descCtrl.clear();
     selectedImages = [];
-    appStateCtrl.fetchIssues(onlyOwner: false);
     appStateCtrl.updateIndex(0);
   }
 

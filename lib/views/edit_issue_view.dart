@@ -55,6 +55,11 @@ class _EditIssueState extends State<EditIssue> {
       currentIssue.images?.addAll(await db.uploadFiles(newSelectImages));
     }
 
+    if (currentIssue.images?.isEmpty ?? true) {
+      EasyLoading.showError("Please add atleast one image");
+      return;
+    }
+
     final appStateCtrl = Get.find<AppStateController>();
     currentIssue.title = titleCtrl.text.trim();
     currentIssue.desc = descCtrl.text.trim();
@@ -66,7 +71,8 @@ class _EditIssueState extends State<EditIssue> {
     descCtrl.clear();
     newSelectImages = [];
     Get.back();
-    appStateCtrl.fetchIssues(onlyOwner: false);
+    appStateCtrl.fetchIssues();
+    appStateCtrl.fetchOwnIssues();
   }
 
   Widget imageWidgetNetwork(String url) {
