@@ -49,32 +49,32 @@
 
 #### Register Page
 
-![Register Page](https://raw.githubusercontent.com/deVamshi/civic_issues_riktam_hackathon/main/screenshots/signup.jpeg?token=GHSAT0AAAAAABZTROM5KAIBLCA3KGKDTYHMY4DKWGQ)
+[![Register Page](https://iili.io/Hf1awjR.md.jpg)](https://freeimage.host/i/Hf1awjR)
 
 #### Login Page
 
-![Login Page](https://raw.githubusercontent.com/deVamshi/civic_issues_riktam_hackathon/main/screenshots/login.jpeg?token=GHSAT0AAAAAABZTROM42QPOUW3MJOKZQYEAY4DKXYQ)
+[![Login Page](https://iili.io/Hf1a0CB.md.jpg)](https://freeimage.host/i/Hf1a0CB)
 
 #### All Issues
 
-![All Issues](https://raw.githubusercontent.com/deVamshi/civic_issues_riktam_hackathon/main/screenshots/all_issues.jpeg?token=GHSAT0AAAAAABZTROM5DS7EFLKE54O7DWPAY4DKYEA)
+[![All Issues](https://iili.io/Hf1aWva.md.jpg)](https://freeimage.host/i/Hf1aWva)
 
 #### Comments
 
-![Comments Page](https://raw.githubusercontent.com/deVamshi/civic_issues_riktam_hackathon/main/screenshots/comments_page.jpeg?token=GHSAT0AAAAAABZTROM4NLTU7WLPIGY33U7AY4DKYSQ)
+[![Comments Page](https://iili.io/Hf1aE41.md.jpg)](https://freeimage.host/i/Hf1aE41)
 
 #### Add Issues
 
-![Add Issue](https://raw.githubusercontent.com/deVamshi/civic_issues_riktam_hackathon/main/screenshots/add_issue.jpeg?token=GHSAT0AAAAAABZTROM4MVNHWTTJOSQGF4RMY4DKZEA)
+[![All Issues](https://iili.io/Hf1aM3F.md.jpg)](https://freeimage.host/i/Hf1aM3F)
 
 #### My Issues
 
-![My Issues](https://raw.githubusercontent.com/deVamshi/civic_issues_riktam_hackathon/main/screenshots/my_issues.jpeg?token=GHSAT0AAAAAABZTROM4DOLJT2FUPID2LXHGY4DKZRA)
+[![My Issues](https://iili.io/Hf1aXyJ.md.jpg)](https://freeimage.host/i/Hf1aXyJ)
 
 #### No Issues
 
-![No Issues](https://raw.githubusercontent.com/deVamshi/civic_issues_riktam_hackathon/main/screenshots/no_issues.jpeg?token=GHSAT0AAAAAABZTROM4FL6VN2QKJFFWUEVEY4DKZZQ)
+[![No Issues](https://iili.io/Hf1ajTv.md.jpg)](https://freeimage.host/i/Hf1ajTv)
 
 #### Update Status for Admin
 
-![Update Status](https://raw.githubusercontent.com/deVamshi/civic_issues_riktam_hackathon/main/screenshots/update_status_admin.jpeg?token=GHSAT0AAAAAABZTROM4XJV6537YZLWX2UZ6Y4DK2BA)
+[![Update Status as Admin](https://iili.io/Hf1aeCN.md.jpg)](https://freeimage.host/i/Hf1aeCN)
